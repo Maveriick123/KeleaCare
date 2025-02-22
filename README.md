@@ -6,7 +6,11 @@
 KeleaCare es un sistema inteligente de apoyo emocional que interactúa de manera empática con los usuarios, perfilando su personalidad y ofreciendo respuestas personalizadas y objetivos para su crecimiento personal.
 
 Este proyecto fue desarrollado como parte de **HackUDC 2025**, con el objetivo de proporcionar un **chatbot de apoyo emocional** que detecte y responda a emociones de forma adaptativa.
+
 ## Participantes
+Angel Diaz Fernadez | @AngelDF00
+Jorge Martinez Estevez | @
+
 ## Características principales
 - 🤖 **Chatbot de Apoyo Emocional**: análisis de sentimientos y emociones en tiempo real, con respuestas adaptadas a la emoción detectada.
 - 📔 **Diario Emocional Inteligente**: permite registrar emociones y almacenar tendencias a lo largo del tiempo.
