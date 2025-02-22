@@ -1,5 +1,5 @@
 
-![KeleaCare](./Captura%20desde%202025-02-22%2016-39-10.png)
+![KeleaCare](./Image/readme.png)
 # KeleaCare
 
 ## 📓Descripción
@@ -8,9 +8,9 @@ KeleaCare es un sistema inteligente de apoyo emocional que interactúa de manera
 Este proyecto fue desarrollado como parte de **HackUDC 2025**, con el objetivo de proporcionar un **chatbot de apoyo emocional** que detecte y responda a emociones de forma adaptativa.
 
 ## Participantes
-Angel Diaz Fernadez | [@AngelDF00](https://github.com/AngelDF00)
-Jose Martinez Estevez | [Joseemartinezz](https://github.com/Joseemartinezz)
-Daniel Quinteiro Graña | [Maveriick123](https://github.com/Maveriick123)
+- Angel Diaz Fernadez | [@AngelDF00](https://github.com/AngelDF00)
+- Jose Martinez Estevez | [Joseemartinezz](https://github.com/Joseemartinezz)
+- Daniel Quinteiro Graña | [Maveriick123](https://github.com/Maveriick123)
 
 ## Características principales
 - 🤖 **Chatbot de Apoyo Emocional**: análisis de sentimientos y emociones en tiempo real, con respuestas adaptadas a la emoción detectada.
