@@ -319,11 +319,3 @@ body {
 .theme-switch input:checked+.switch::before {
     left: 25px;
 }
-
-/* Fondo con corazones */
-/* Asegurar que el fondo con corazones se aplique correctamente */
-body.hearts-background {
-    background-size: cover;
-    background-position: center;
-    background-repeat: repeat;
-}

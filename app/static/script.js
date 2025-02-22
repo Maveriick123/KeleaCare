@@ -40,6 +40,15 @@ async function sendMessageChat() {
     // Crear el elemento de mensaje del usuario
     const userMessage = document.createElement("div");
     userMessage.classList.add("message", "message-user"); // Aplica clases CSS
+
+    // Verificar si el modo de corazones está activado y aplicar el color correcto
+    const themeToggle = document.querySelector("#theme-toggle");
+    if (themeToggle.checked) {
+        userMessage.style.backgroundColor = "#C70039"; // Fondo rojo oscuro si está activado el tema
+    } else {
+        userMessage.style.backgroundColor = "#6a82fb"; // Fondo azul si está desactivado
+    }
+
     userMessage.innerHTML = `<div class="message-content">${messageText}</div>`;
 
     // Agregar el mensaje al chat

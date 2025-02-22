@@ -1,7 +1,8 @@
 import faiss
 import numpy as np
-
+"""
 class FaissIndex:
+    
     # dimension -> numero de elementos de cada vector manejado por el mismo índice
     def __init__(self, dimension, nlist):
         self.dimension = dimension
@@ -21,7 +22,12 @@ class FaissIndex:
             train_data = np.random.random((1000, dimension)).astype('float32')
             # Preparamos el índice para que se puedan agregar vectores y realizar búsquedas
             self.index.train(train_data) 
-            print("Índice entrenado.")
+            print("Índice entrenado.")"""
+
+class FaissIndex:
+    def __init__(self, dimension):
+        self.dimension = dimension
+        self.index = faiss.IndexFlatL2(dimension)
 
     def add_vectors(self, vectors: np.ndarray):
         """Añadir vectores al índice"""
