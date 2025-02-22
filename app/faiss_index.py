@@ -3,7 +3,7 @@ import numpy as np
 
 class FaissIndex:
     # dimension -> numero de elementos de cada vector manejado por el mismo índice
-    def __init__(self, dimension, nlist = 5):
+    def __init__(self, dimension, nlist):
         self.dimension = dimension
         # Crear un índice FAISS con búsqueda aproximada IVFFlat (Inverted File with Flat quantization)
         # Flat: los vectores dentro de cada celda se almacenan sin compresión o reducción
