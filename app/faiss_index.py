@@ -2,7 +2,6 @@ import faiss
 import numpy as np
 """
 class FaissIndex:
-    
     # dimension -> numero de elementos de cada vector manejado por el mismo índice
     def __init__(self, dimension, nlist):
         self.dimension = dimension
@@ -33,13 +32,9 @@ class FaissIndex:
         """Añadir vectores al índice"""
         if not isinstance(vectors, np.ndarray):
             raise ValueError("Los vectores deben ser un arreglo numpy")
-        if vectors.shape[1] != self.dimension:
-            raise ValueError(f"El tamaño del vector debe ser {self.dimension}")
         self.index.add(vectors)
 
     def search_vectors(self, query: np.ndarray, k: int):
         """Buscar los vectores más cercanos en el índice"""
-        if query.shape[1] != self.dimension:
-            raise ValueError(f"El tamaño del vector de consulta debe ser {self.dimension}")
         distances, indices = self.index.search(query, k)
         return distances, indices

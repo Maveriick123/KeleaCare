@@ -17,7 +17,7 @@ os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 sys.stdout = open(os.devnull, 'w')
 sys.stderr = open(os.devnull, 'w')
 
-nltk.download('punkt')
+nltk.download('punkt_tab')
 
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
@@ -42,11 +42,12 @@ def chat(prompt: str):
     response = tokenizer.decode(response_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response
 
-def get_emotions(prompt: str): 
+def get_emotions(prompt: str):
     emotions = text2emotion.get_emotion(prompt)
-    if not emotions: 
-        return np.zeros(5)
-    return np.array(emotions.values())
+    expected_keys = ["Happy", "Angry", "Surprise", "Sad", "Fear"]
+    tmp = [emotions.get(key, 0) for key in expected_keys]
+    return np.array(tmp, dtype=np.float32)
+
 
 # Get user input and process it
 """

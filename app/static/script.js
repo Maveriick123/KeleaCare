@@ -15,6 +15,34 @@ async function sendMessage() {
     console.log(data);
 }
 
+async function receiveMessage() {
+    try {
+        // Hacer la solicitud a FastAPI
+        const response = await fetch("http://127.0.0.1:8000/api/get-response"); // Endpoint donde FastAPI envía la respuesta
+        const data = await response.json(); // Convertimos la respuesta a JSON
+ 
+        if (response.ok) {
+            const chatMessages = document.querySelector(".chat-messages");
+ 
+            // Crear el elemento de mensaje de la IA
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "message-bot"); // Aplica clases CSS
+            botMessage.innerHTML = `<div class="message-content">${data.message}</div>`; // Muestra el mensaje recibido
+ 
+            // Agregar el mensaje al chat
+            chatMessages.appendChild(botMessage);
+ 
+            // Desplazar automáticamente hacia abajo para mostrar el último mensaje
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } else {
+            console.error("Error en la respuesta del servidor:", data);
+        }
+    } catch (error) {
+        console.error("Error al recibir el mensaje de la IA:", error);
+    }
+}
+ 
+ 
 function toggleHistory() {
     var history = document.querySelector('.chat-history');
     var chat = document.querySelector('.chat-container');
@@ -29,74 +57,77 @@ function toggleHistory() {
         openHistory.style.display = "block";
     }
 }
-
+ 
 async function sendMessageChat() {
-    const inputField = document.querySelector(".chat-input input"); // Selecciona el input correctamente
+    const inputField = document.querySelector(".chat-input input");
     const chatMessages = document.querySelector(".chat-messages");
-    const messageText = inputField.value.trim(); // Captura el mensaje y elimina espacios vacíos
-
-    if (!messageText) return; // Evita enviar mensajes vacíos
-
-    // Crear el elemento de mensaje del usuario
+    const messageText = inputField.value.trim();
+ 
+    if (!messageText) return;
+ 
+    // Crear el mensaje del usuario
     const userMessage = document.createElement("div");
-    userMessage.classList.add("message", "message-user"); // Aplica clases CSS
-
-    // Verificar si el modo de corazones está activado y aplicar el color correcto
-    const themeToggle = document.querySelector("#theme-toggle");
-    if (themeToggle.checked) {
-        userMessage.style.backgroundColor = "#C70039"; // Fondo rojo oscuro si está activado el tema
-    } else {
-        userMessage.style.backgroundColor = "#6a82fb"; // Fondo azul si está desactivado
-    }
-
+    userMessage.classList.add("message", "message-user");
     userMessage.innerHTML = `<div class="message-content">${messageText}</div>`;
-
-    // Agregar el mensaje al chat
+ 
+    // Agregar el mensaje del usuario al chat
     chatMessages.appendChild(userMessage);
-
-    // Desplazar automáticamente hacia abajo para mostrar el último mensaje
     chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Limpiar el campo de entrada
     inputField.value = "";
+ 
+    try {
+        // Enviar mensaje a FastAPI
+        const response = await fetch("http://127.0.0.1:8000/api/send-message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: messageText })
+        });
+ 
+        if (response.ok) {
+            // Esperar y mostrar la respuesta de la IA
+            receiveMessage();
+        } else {
+            console.error("Error en la respuesta de FastAPI");
+        }
+    } catch (error) {
+        console.error("Error al enviar el mensaje:", error);
+    }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
+ 
+ 
+document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".chat-input button").addEventListener("click", sendMessageChat);
 });
-
-document.addEventListener("DOMContentLoaded", function () {
+ 
+document.addEventListener("DOMContentLoaded", function() {
     const themeToggle = document.querySelector("#theme-toggle");
-    const chatContainer = document.querySelector("#chatContainer");
-    const chatHeader = document.querySelector(".chat-header");
-
-    // Obtener el valor de data-background en index.html
-    const backgroundImage = chatContainer.getAttribute("data-background");
-
-    themeToggle.addEventListener("change", function () {
+    const chatContainer = document.querySelector(".chat-container");
+    const sendButton = document.querySelector(".chat-input button"); // Botón enviar
+    const inputField = document.querySelector(".chat-input input"); // Campo de entrada
+ 
+    // Listener para detectar la tecla "Enter" en el campo de entrada
+    inputField.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") { // Verifica si se presionó Enter
+            event.preventDefault(); // Evita que el Enter haga un salto de línea
+            sendButton.click(); // Simula un clic en el botón "Enviar"
+        }
+    });
+ 
+    themeToggle.addEventListener("change", function() {
         if (themeToggle.checked) {
-            // 🔹 Aplica la imagen de corazones SOLO si el switch está activado
-            chatContainer.style.backgroundImage = `url('${backgroundImage}')`;
-
-            // Cambia el color de los mensajes del usuario
+            chatContainer.style.backgroundImage = "url('static/Image/back.jpeg')"; 
             document.querySelectorAll(".message-user").forEach(msg => {
-                msg.style.backgroundColor = "#C70039"; // Rojo oscuro
+                msg.style.backgroundColor = "#C70039";
             });
-
-            // Cambia el color del fondo de la cabecera
-            chatHeader.style.backgroundColor = "#C70039"; // Rojo oscuro
-
+            document.querySelector(".chat-header").style.backgroundColor = "#C70039"; 
+            sendButton.style.backgroundColor = "#C70039";
         } else {
-            // 🔹 Quita el fondo cuando el switch está desactivado
-            chatContainer.style.backgroundImage = "none";
-
-            // Restaura el color original de los mensajes del usuario (azul)
+            chatContainer.style.backgroundImage = "none"; 
             document.querySelectorAll(".message-user").forEach(msg => {
-                msg.style.backgroundColor = "#6a82fb"; // Azul original
+                msg.style.backgroundColor = "#6a82fb";
             });
-
-            // Restaura el color original de la cabecera (azul)
-            chatHeader.style.backgroundColor = "#6a82fb"; // Azul original
+            document.querySelector(".chat-header").style.backgroundColor = "#6a82fb"; 
+            sendButton.style.backgroundColor = "#6a82fb";
         }
     });
 });
