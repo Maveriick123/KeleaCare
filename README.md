@@ -1,12 +1,12 @@
-# KeleaCare
 
 ![KeleaCare](./Captura%20desde%202025-02-22%2016-39-10.png)
+# KeleaCare
 
-## Descripción
+## 📓Descripción
 KeleaCare es un sistema inteligente de apoyo emocional que interactúa de manera empática con los usuarios, perfilando su personalidad y ofreciendo respuestas personalizadas y objetivos para su crecimiento personal.
 
 Este proyecto fue desarrollado como parte de **HackUDC 2025**, con el objetivo de proporcionar un **chatbot de apoyo emocional** que detecte y responda a emociones de forma adaptativa.
-
+## Participantes
 ## Características principales
 - 🤖 **Chatbot de Apoyo Emocional**: análisis de sentimientos y emociones en tiempo real, con respuestas adaptadas a la emoción detectada.
 - 📔 **Diario Emocional Inteligente**: permite registrar emociones y almacenar tendencias a lo largo del tiempo.
@@ -56,5 +56,5 @@ Si quieres contribuir a **KeleaCare**, sigue estos pasos:
 4. Envía un pull request.
 
 ## Contacto
-Para cualquier duda o sugerencia, puedes encontrarnos en el stand de **Kelea** en **HackUDC2025**. ¡Esperamos tu participación!
+Para cualquier duda o sugerencia, puedes contactar con nosotros mediante los correos proporcionados en el apartado de participantes
 
