@@ -1,57 +1,54 @@
-from transformers import  GPT2LMHeadModel, GPT2Tokenizer
+from transformers import pipeline
 import torch
 import text2emotion
 import nltk
+import warnings
+import os
+import sys
 
-nltk.download('punkt') # resource for tokenization
+# Suppress warnings and unnecessary logs
+warnings.filterwarnings("ignore")
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
-model_name = "microsoft/DialoGPT-medium"  
-tokenizer = GPT2Tokenizer.from_pretrained(model_name) # load the tokenizer converts phrases in to adecuate input for the model
-model = GPT2LMHeadModel.from_pretrained(model_name,output_hidden_states=True) # load the model
-tokenizer.add_special_tokens({'pad_token': '[PAD]'}) # add special token for padding in case sizings arent the same
+# Suppress NLTK download messages
+sys.stdout = open(os.devnull, 'w')
+sys.stderr = open(os.devnull, 'w')
 
+nltk.download('punkt')
 
-# Function to get a format that the model can process
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
+
+# Load model and tokenizer
+model_name = "facebook/m2m100_418M"  
+tokenizer = M2M100Tokenizer.from_pretrained(model_name)
+model = M2M100ForConditionalGeneration.from_pretrained(model_name, output_hidden_states=True)
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+
 def get_embedding(query):
-    # Tokenize the query in tensors (multidimensional arrays) in pytorch format
     inputs = tokenizer(query, return_tensors="pt")
     outputs = model(**inputs)
-    
-    # Extract hidden states (a tuple of (layer_0, layer_1, ..., layer_n))
-    hidden_states = outputs.hidden_states  # This is a tuple of layer-wise hidden states
-    
-    # Get the last hidden state (or average across layers if needed)
+    hidden_states = outputs.hidden_states
     last_hidden_state = hidden_states[-1]
-    
-    # Mean pooling over the token embeddings to get the sentence embedding
-    query_embedding = last_hidden_state.mean(dim=1)  # Mean of token embeddings
-
+    query_embedding = last_hidden_state.mean(dim=1)
     return query_embedding
 
+def chat(prompt):
+    input_ids = tokenizer.encode(prompt + tokenizer.eos_token, return_tensors="pt")
+    response_ids = model.generate(input_ids, max_length=100, pad_token_id=tokenizer.eos_token_id)
+    response = tokenizer.decode(response_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
+    return response
 
+# Get user input and process it
+while(1):
+    query = input("You: ")
+    response = chat(query)
+    query_embedding = get_embedding(query)
+    emotions = text2emotion.get_emotion(query)
 
-
-
-def generate_response(query):
-    # Encode the query into tokens
-    input_ids = tokenizer.encode(query, return_tensors="pt")
-
-    # Generate a response using the model
-    output = model.generate(input_ids, max_length=50, num_return_sequences=1, no_repeat_ngram_size=2, temperature=0.7)
-    
-    # Decode and return the generated text
-    generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
-    return generated_text
-
-# Swap placeholder with input query
-query = "This is great"
-response = generate_response(query)
-query_embedding = get_embedding(query)
-
-
-emotions = text2emotion.get_emotion(query)
-
-print(query_embedding)
-print(response)
-print(emotions)
-print(list(emotions.values()))
+    print("\nEmbedding Tensor:", query_embedding)
+    print("Embedding Shape:", query_embedding.shape)
+    print("Chatbot Response:", response)
+    print("Emotions:", emotions)
+    print("Emotion Values:", list(emotions.values()))
